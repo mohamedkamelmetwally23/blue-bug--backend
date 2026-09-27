@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import helmet from "helmet";
+import * as helmetModule from "helmet";
 import { pinoHttp } from "pino-http";
 import { env } from "./config/env.js";
 import { errorHandler, notFound } from "./core/http/error-handler.js";
@@ -11,7 +11,7 @@ import { weekRouter } from "./features/weeks/week.routes.js";
 
 export const createApp = () => {
   const app = express();
-  app.use(helmet()); app.use(cors()); app.use(express.json({ limit: "1mb" })); app.use(pinoHttp());
+  app.use(helmetModule.default()); app.use(cors()); app.use(express.json({ limit: "1mb" })); app.use(pinoHttp());
   app.get(`${env.API_PREFIX}/health`, (_req, res) => res.json({ status: "ok" }));
   app.use(`${env.API_PREFIX}/overview`, overviewRouter);
   app.use(`${env.API_PREFIX}/tasks`, taskRouter);
