@@ -9,9 +9,11 @@ import { overviewRouter } from "./features/overview/overview.routes.js";
 import { taskRouter } from "./features/tasks/task.routes.js";
 import { weekRouter } from "./features/weeks/week.routes.js";
 
+const createHelmet = helmetModule.default as unknown as () => express.RequestHandler;
+
 export const createApp = () => {
   const app = express();
-  app.use(helmetModule.default()); app.use(cors()); app.use(express.json({ limit: "1mb" })); app.use(pinoHttp());
+  app.use(createHelmet()); app.use(cors()); app.use(express.json({ limit: "1mb" })); app.use(pinoHttp());
   app.get(`${env.API_PREFIX}/health`, (_req, res) => res.json({ status: "ok" }));
   app.use(`${env.API_PREFIX}/overview`, overviewRouter);
   app.use(`${env.API_PREFIX}/tasks`, taskRouter);
