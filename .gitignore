@@ -1,0 +1,21 @@
+node_modules/
+dist/
+coverage/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs and TypeScript cache
+*.log
+*.tsbuildinfo
+
+# Local editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
