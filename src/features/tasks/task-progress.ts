@@ -76,7 +76,7 @@ export const parseAccountOutcomes = (notes = ""): AccountOutcomes => {
 export const calculateTaskProgress = ({ title, notes = "", structuredTarget, status }: TaskProgressInput): TaskProgress => {
   const titleTarget = title.match(/\d+/)?.[0];
   const checkedTotal = /action needed/i.test(title) ? extractCheckedTotal(notes) : 0;
-  const target = checkedTotal || (structuredTarget && structuredTarget > 0 ? structuredTarget : titleTarget ? Number(titleTarget) : 1);
+  const target = checkedTotal || (structuredTarget !== undefined && structuredTarget >= 0 ? structuredTarget : titleTarget ? Number(titleTarget) : 1);
   const checklistCount = notes.match(/(?:✅|☑️?)/gu)?.length ?? 0;
   const completed = checkedTotal || (checklistCount > 0 ? Math.min(checklistCount, target) : status === "completed" ? target : 0);
   const signals = parseNoteSignals(notes);

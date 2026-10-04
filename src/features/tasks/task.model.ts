@@ -11,7 +11,7 @@ export interface Task {
   workflowActual: number;
   signals: Array<{ type: "blocked" | "credential" | "operational" | "action" | "transition"; text: string }>;
   accountOutcomes: { good: number; bad: number; notFound: number; total: number };
-  status: TaskStatus; startDate?: Date; endDate?: Date;
+  status: TaskStatus; startDate?: Date; endDate?: Date; completed?: number;
   deliverable?: string; notes?: string; target: number; source: "dashboard" | "google-sheets";
 }
 
@@ -27,8 +27,7 @@ const taskSchema = new Schema<Task>({
   accountOutcomes: { good: { type: Number, default: 0 }, bad: { type: Number, default: 0 }, notFound: { type: Number, default: 0 }, total: { type: Number, default: 0 } },
   owner: String, status: { type: String, enum: ["not-started", "in-progress", "completed", "blocked"], default: "not-started" },
   startDate: Date, endDate: Date, deliverable: String, notes: String,
-  target: { type: Number, default: 1 }, source: { type: String, enum: ["dashboard", "google-sheets"], default: "dashboard" }
+  target: { type: Number, default: 1 }, completed: { type: Number, min: 0 }, source: { type: String, enum: ["dashboard", "google-sheets"], default: "dashboard" }
 }, { timestamps: true });
 
 export const TaskModel = model<Task>("Task", taskSchema);
-

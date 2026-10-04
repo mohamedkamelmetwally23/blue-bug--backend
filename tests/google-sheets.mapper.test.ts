@@ -16,12 +16,12 @@ describe("Google Sheets row mapping", () => {
   it("finds the task table below a title row and maps weekly-plan headers", () => {
     const [row] = rowsFromValues([
       ["", "", "WEEKLY PLAN"],
-      ["Task", "Day", "Start date", "End date", "Names of acc", "Num Done", "Clarifications"],
-      ["action needed", "Tuesday", "9/29/2026", "9/30/2026", "✅ one@example.com\n✅ two@example.com", "2", "2 US acc"]
+      ["Task", "Day", "Start date", "End date", "Names of acc", "Num", "Num Done", "Clarifications"],
+      ["action needed", "Tuesday", "9/29/2026", "9/30/2026", "✅ one@example.com\n✅ two@example.com", "5", "2", "2 US acc"]
     ]).map(normalizeRow);
     expect(row).toMatchObject({
       task: "action needed", priority: "Tuesday", startDate: "9/29/2026", endDate: "9/30/2026",
-      accountNames: "✅ one@example.com\n✅ two@example.com", completed: "2", notes: "2 US acc"
+      accountNames: "✅ one@example.com\n✅ two@example.com", target: "5", completed: "2", notes: "2 US acc"
     });
   });
 });

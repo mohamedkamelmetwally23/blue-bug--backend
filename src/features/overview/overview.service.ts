@@ -33,7 +33,13 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
   const spent = expenses[0]?.total ?? 0;
   const completedByTask = new Map<string, number>();
   for (const entry of entries) completedByTask.set(entry.taskId.toString(), (completedByTask.get(entry.taskId.toString()) ?? 0) + entry.completed);
-  const taskFacts = tasks.map((task) => ({ task, completed: Math.min(completedByTask.get(task.id) ?? 0, task.target), remaining: Math.max(task.target - (completedByTask.get(task.id) ?? 0), 0) }));
+  const taskFacts = tasks.map((task) => {
+    const recordedCompleted = completedByTask.get(task.id) ?? 0;
+    const taskCompleted = task.source === "google-sheets"
+      ? Math.min(task.completed ?? recordedCompleted, task.target)
+      : Math.min(recordedCompleted, task.target);
+    return { task, completed: taskCompleted, remaining: Math.max(task.target - taskCompleted, 0) };
+  });
   const typeMap = new Map<string, { target: number; completed: number; remaining: number }>();
   const ownerMap = new Map<string, { target: number; completed: number; remaining: number }>();
   for (const fact of taskFacts) {
@@ -49,6 +55,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
     weekday: task.dayDate?.toLocaleDateString("en", { weekday: "long", timeZone: "UTC" }) ?? task.dayBucket ?? "—",
     target: task.target, completed: taskCompleted, remaining, status: task.status,
     reason: task.blockerSummary ?? (remaining > 0 ? task.notes?.split(/\r?\n/).find(Boolean) ?? "No reason provided" : "Completed"),
+    clarifications: task.notes ?? "",
     accountOutcomes: task.accountOutcomes
   }));
   const detailFor = (kinds: TaskKind[]) => detailForFacts(taskFacts.filter(({ task }) => kinds.includes(task.kind)));
@@ -59,7 +66,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
   const emailFacts = tasks
     .filter((task) => task.normalizedType === "email")
     .map((task) => {
-      const taskCompleted = completedByTask.get(task.id) ?? 0;
+      const taskCompleted = task.source === "google-sheets" ? task.completed ?? completedByTask.get(task.id) ?? 0 : completedByTask.get(task.id) ?? 0;
       return { task, completed: taskCompleted, remaining: Math.max(task.target - taskCompleted, 0) };
     });
   const factsForType = (normalizedType: string) => taskFacts.filter(({ task }) => task.normalizedType === normalizedType);
@@ -85,6 +92,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
         weekday: first.task.dayDate?.toLocaleDateString("en", { weekday: "long", timeZone: "UTC" }) ?? first.task.dayBucket ?? "—",
         target: actual, completed: actual, remaining: 0, status,
         reason: facts.map(({ task }) => task.notes).filter((notes): notes is string => Boolean(notes)).join("\n\n") || "No notes provided",
+        clarifications: facts.map(({ task }) => task.notes).filter((notes): notes is string => Boolean(notes)).join("\n\n"),
         noteQuantity: true
       };
     });

@@ -24,7 +24,8 @@ taskRouter.get("/weekly", asyncHandler(async (_req, res) => {
       normalizedType: task.normalizedType, remaining: task.remaining, blockerSummary: task.blockerSummary, signals: task.signals,
       status: task.status, startDate: task.startDate?.toISOString(), endDate: task.endDate?.toISOString(),
       deliverable: task.deliverable, notes: task.notes, target: task.target,
-      entries: (entriesByTask.get(task.id) ?? []).map((entry) => ({ id: entry.id, date: entry.date.toISOString(), completed: entry.completed, notes: entry.notes }))
+      entries: (entriesByTask.get(task.id) ?? []).map((entry) => ({ id: entry.id, date: entry.date.toISOString(), completed: entry.completed, notes: entry.notes })),
+      sheetCompleted: task.source === "google-sheets" ? task.completed : undefined
     }))
   });
 }));

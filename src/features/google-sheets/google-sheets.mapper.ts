@@ -3,7 +3,7 @@ const aliases: Readonly<Record<string, string>> = {
   "entity type": "entityType", entitytype: "entityType", task: "task", priority: "priority", owner: "owner",
   day: "priority", status: "status", "start date": "startDate", "end date": "endDate", deliverable: "deliverable",
   notes: "notes", clarifications: "notes", "names of acc": "accountNames", "names of accounts": "accountNames",
-  "num done": "completed",
+  num: "target", done: "completed", "num done": "completed",
   kind: "kind", target: "target", name: "name", country: "country", provider: "provider", email: "email",
   "lifecycle status": "lifecycleStatus", "invitation status": "invitationStatus", "activation status": "activationStatus",
   "deactivation date": "deactivationDate", blockers: "blockers", "last checked": "lastChecked", title: "title",

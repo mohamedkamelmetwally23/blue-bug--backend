@@ -10,6 +10,7 @@ import { calculateTaskProgress, parseAccountOutcomes, resolveDayBucketDate } fro
 import { WeekModel } from "../weeks/week.model.js";
 import { normalizeRow, rowsFromValues } from "./google-sheets.mapper.js";
 import { sheetRecordSchema } from "./google-sheets.schemas.js";
+import { parseSheetDate, rowsInSheetSyncWeek, SHEET_SYNC_WEEK } from "./week-scope.js";
 
 const dateOrUndefined = (value?: string): Date | undefined => value ? new Date(value) : undefined;
 
@@ -70,13 +71,13 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
   const worksheet = await readConfiguredWorksheet();
   const values = worksheet.values;
   const rows = rowsFromValues(values);
-  const normalizedRows = rows.map(normalizeRow).filter((row) => String(row.task ?? "").trim().toLowerCase() !== "task" && String(row.task ?? "").trim() !== "");
-  const dates = normalizedRows.flatMap((row) => [parseSheetDate(row.startDate), parseSheetDate(row.endDate)]).filter((date): date is Date => date !== undefined);
-  if (dates.length === 0) throw new Error(`Worksheet "${worksheet.title}" has no valid task start/end dates for creating a week`);
-  const start = new Date(Math.min(...dates.map((date) => date.getTime())));
-  const end = new Date(Math.max(...dates.map((date) => date.getTime())));
-  const weekId = `google-${env.GOOGLE_SHEET_ID}-${worksheet.gid}`;
-  const preparedTasks = normalizedRows.map((row) => prepareWeeklyTask(row, weekId, worksheet.gid, start));
+  const normalizedRows = rows.map((row, index) => ({ data: normalizeRow(row), sheetRow: index + 2 }))
+    .filter(({ data }) => String(data.task ?? "").trim().toLowerCase() !== "task" && String(data.task ?? "").trim() !== "");
+  const scopedRows = normalizedRows.filter(({ data }) => rowsInSheetSyncWeek([data]).length > 0);
+  const start = SHEET_SYNC_WEEK.start;
+  const end = SHEET_SYNC_WEEK.end;
+  const weekId = `google-${env.GOOGLE_SHEET_ID}-${worksheet.gid}-${SHEET_SYNC_WEEK.id}`;
+  const preparedTasks = scopedRows.map(({ data }) => prepareWeeklyTask(data, weekId, worksheet.gid, start));
   const targets = preparedTasks.reduce((result, task) => {
     if (task.kind === "script") result.scripts += task.target;
     if (task.normalizedType === "email") result.emails += task.target;
@@ -87,7 +88,7 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
   await WeekModel.updateMany({ weekId: { $ne: weekId }, isActive: true }, { $set: { isActive: false } });
   await WeekModel.findOneAndUpdate(
     { weekId },
-    { $set: { label: worksheet.title, start, end, targets, isActive: true }, $setOnInsert: { budget: 0, currency: "USD" } },
+    { $set: { label: SHEET_SYNC_WEEK.label, start, end, targets, isActive: true }, $setOnInsert: { budget: 0, currency: "USD" } },
     { upsert: true, runValidators: true }
   );
 
@@ -98,7 +99,7 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
     try {
       const document = await TaskModel.findOneAndUpdate(
         { recordId: task.recordId },
-        { $set: { ...task, source: "google-sheets" }, $unset: { priority: 1 } },
+        { $set: { ...task, completed: task.completed, source: "google-sheets" }, $unset: { priority: 1 } },
         { upsert: true, new: true, runValidators: true }
       );
       await TaskEntryModel.findOneAndUpdate(
@@ -109,23 +110,16 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
       syncedRecordIds.push(task.recordId);
       synced += 1;
     }
-    catch (error: unknown) { failures.push({ row: index + 2, message: error instanceof Error ? error.message : "Unknown validation error" }); }
+    catch (error: unknown) { failures.push({ row: scopedRows[index]!.sheetRow, message: error instanceof Error ? error.message : "Unknown validation error" }); }
   }
-  const staleTasks = await TaskModel.find({ weekId, source: "google-sheets", recordId: { $nin: syncedRecordIds } }).select("_id");
-  if (staleTasks.length > 0) {
-    await TaskEntryModel.deleteMany({ taskId: { $in: staleTasks.map((task) => task._id) } });
-    await TaskModel.deleteMany({ _id: { $in: staleTasks.map((task) => task._id) } });
+  if (failures.length === 0) {
+    const staleTasks = await TaskModel.find({ weekId, source: "google-sheets", recordId: { $nin: syncedRecordIds } }).select("_id");
+    if (staleTasks.length > 0) {
+      await TaskEntryModel.deleteMany({ taskId: { $in: staleTasks.map((task) => task._id) } });
+      await TaskModel.deleteMany({ _id: { $in: staleTasks.map((task) => task._id) } });
+    }
   }
   return { synced, failures };
-};
-
-const parseSheetDate = (value: unknown): Date | undefined => {
-  if (typeof value !== "string") return undefined;
-  const match = value.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (!match) return undefined;
-  const month = Number(match[1]); const day = Number(match[2]); const year = Number(match[3]);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  return Number.isNaN(date.getTime()) ? undefined : date;
 };
 
 const prepareWeeklyTask = (row: Record<string, unknown>, weekId: string, gid: number, weekStart: Date) => {
@@ -150,12 +144,17 @@ const prepareWeeklyTask = (row: Record<string, unknown>, weekId: string, gid: nu
   const status: TaskStatus = statusValue === "completed" ? "completed" : statusValue === "in-progress" ? "in-progress" : statusValue === "blocked" ? "blocked" : "not-started";
   const dayBucket = dayBucketValue || undefined;
   const dayDate = dayBucket ? resolveDayBucketDate(dayBucket, weekStart) : undefined;
-  const progress = calculateTaskProgress({ title, notes, status });
+  const reportedTarget = String(row.target ?? "").trim();
+  const structuredTarget = reportedTarget ? Number(reportedTarget) : undefined;
+  if (structuredTarget !== undefined && (!Number.isFinite(structuredTarget) || structuredTarget < 0)) {
+    throw new Error(`Invalid Num value for task "${title}"`);
+  }
+  const progress = calculateTaskProgress({ title, notes, structuredTarget, status });
   const accountNames = String(row.accountNames ?? "").trim();
   const reportedCompleted = String(row.completed ?? "").trim();
   const completed = reportedCompleted ? Number(reportedCompleted) : progress.completed;
   if (!Number.isFinite(completed) || completed < 0) throw new Error(`Invalid completed count for task "${title}"`);
-  const target = kind === "action-check" && reportedCompleted ? Math.max(progress.target, completed) : progress.target;
+  const target = progress.target;
   return {
     recordId, weekId, title, kind, owner, status, startDate, endDate, deliverable, notes, dayBucket, dayDate,
     ...progress, target, completed,
