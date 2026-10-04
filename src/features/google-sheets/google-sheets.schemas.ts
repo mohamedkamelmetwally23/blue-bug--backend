@@ -8,7 +8,7 @@ export const sheetRecordSchema = z.discriminatedUnion("entityType", [
   base.extend({
     entityType: z.literal("task"), task: text.min(1), priority: text.default(""),
     owner: optionalText, status: z.enum(["not-started", "in-progress", "completed", "blocked"]).default("not-started"),
-    startDate: optionalText, endDate: optionalText, deliverable: optionalText, notes: optionalText,
+    startDate: optionalText, endDate: optionalText, deliverable: optionalText, accountNames: optionalText, notes: optionalText,
     kind: z.enum(["script", "email", "action-check", "invitation", "activation", "deactivation", "other"]).default("other"),
     target: z.coerce.number().nonnegative().default(1)
   }),
@@ -33,4 +33,3 @@ export const sheetRecordSchema = z.discriminatedUnion("entityType", [
 
 export const webhookSchema = z.object({ row: z.record(z.unknown()) });
 export type SheetRecord = z.infer<typeof sheetRecordSchema>;
-

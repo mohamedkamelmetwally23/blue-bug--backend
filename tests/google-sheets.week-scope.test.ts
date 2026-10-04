@@ -18,6 +18,25 @@ describe("Google Sheets sync week scope", () => {
     ]).map(({ task }) => task)).toEqual(["starts in scope", "no start date"]);
   });
 
+  it("detects day-first dates and interprets ambiguous dates consistently across the sheet", () => {
+    const rows = [
+      { task: "Monday", startDate: "28/09/2026" },
+      { task: "Saturday", startDate: "3/10/2026" },
+      { task: "previous week", startDate: "21/09/2026" }
+    ];
+    expect(rowsInSheetSyncWeek(rows).map(({ task }) => task)).toEqual(["Monday", "Saturday"]);
+    expect(parseSheetDate("3/10/2026", "day-first")?.toISOString()).toBe("2026-10-03T00:00:00.000Z");
+  });
+
+  it("continues to accept month-first dates and Google Sheets date serials", () => {
+    expect(rowsInSheetSyncWeek([
+      { task: "Monday", startDate: "9/28/2026" },
+      { task: "Saturday", startDate: "10/3/2026" },
+      { task: "previous week", startDate: "9/21/2026" }
+    ]).map(({ task }) => task)).toEqual(["Monday", "Saturday"]);
+    expect(parseSheetDate(46293)?.toISOString()).toBe("2026-09-28T00:00:00.000Z");
+  });
+
   it("rejects impossible calendar dates", () => {
     expect(parseSheetDate("9/31/2026")).toBeUndefined();
   });

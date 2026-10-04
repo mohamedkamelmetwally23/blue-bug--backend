@@ -12,7 +12,7 @@ export interface Task {
   signals: Array<{ type: "blocked" | "credential" | "operational" | "action" | "transition"; text: string }>;
   accountOutcomes: { good: number; bad: number; notFound: number; total: number };
   status: TaskStatus; startDate?: Date; endDate?: Date; completed?: number;
-  deliverable?: string; notes?: string; target: number; source: "dashboard" | "google-sheets";
+  deliverable?: string; accountNames?: string; notes?: string; target: number; source: "dashboard" | "google-sheets";
 }
 
 const taskSchema = new Schema<Task>({
@@ -26,7 +26,7 @@ const taskSchema = new Schema<Task>({
   signals: { type: [{ type: { type: String, enum: ["blocked", "credential", "operational", "action", "transition"], required: true }, text: { type: String, required: true } }], default: [] },
   accountOutcomes: { good: { type: Number, default: 0 }, bad: { type: Number, default: 0 }, notFound: { type: Number, default: 0 }, total: { type: Number, default: 0 } },
   owner: String, status: { type: String, enum: ["not-started", "in-progress", "completed", "blocked"], default: "not-started" },
-  startDate: Date, endDate: Date, deliverable: String, notes: String,
+  startDate: Date, endDate: Date, deliverable: String, accountNames: String, notes: String,
   target: { type: Number, default: 1 }, completed: { type: Number, min: 0 }, source: { type: String, enum: ["dashboard", "google-sheets"], default: "dashboard" }
 }, { timestamps: true });
 

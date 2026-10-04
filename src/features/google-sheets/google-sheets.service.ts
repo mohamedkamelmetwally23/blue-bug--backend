@@ -10,7 +10,7 @@ import { calculateTaskProgress, parseAccountOutcomes, resolveDayBucketDate } fro
 import { WeekModel } from "../weeks/week.model.js";
 import { normalizeRow, rowsFromValues } from "./google-sheets.mapper.js";
 import { sheetRecordSchema } from "./google-sheets.schemas.js";
-import { parseSheetDate, rowsInSheetSyncWeek, SHEET_SYNC_WEEK } from "./week-scope.js";
+import { parseSheetDate, rowsInSheetSyncWeek, sheetDateOrder, SHEET_SYNC_WEEK } from "./week-scope.js";
 
 const dateOrUndefined = (value?: string): Date | undefined => value ? new Date(value) : undefined;
 
@@ -54,7 +54,7 @@ export const upsertSheetRecord = async (input: Record<string, unknown>): Promise
     const week = await WeekModel.findOne({ weekId: row.weekId });
     const isDayBucket = /^P\d+$/i.test(row.priority);
     await TaskModel.findOneAndUpdate({ recordId: row.recordId }, {
-      $set: { ...common, title: row.task, kind: row.kind, owner: row.owner, status: row.status, startDate: dateOrUndefined(row.startDate), endDate: dateOrUndefined(row.endDate), deliverable: row.deliverable, notes: row.notes, dayBucket: isDayBucket ? row.priority.toUpperCase() : undefined, dayDate: isDayBucket && week ? resolveDayBucketDate(row.priority, week.start) : undefined, ...progress },
+      $set: { ...common, title: row.task, kind: row.kind, owner: row.owner, status: row.status, startDate: dateOrUndefined(row.startDate), endDate: dateOrUndefined(row.endDate), deliverable: row.deliverable, accountNames: row.accountNames, notes: row.notes, dayBucket: isDayBucket ? row.priority.toUpperCase() : undefined, dayDate: isDayBucket && week ? resolveDayBucketDate(row.priority, week.start) : undefined, ...progress },
       ...(isDayBucket ? { $unset: { priority: 1 } } : { $setOnInsert: { priority: row.priority || undefined } })
     }, { upsert: true, runValidators: true });
   } else if (row.entityType === "account") {
@@ -73,11 +73,12 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
   const rows = rowsFromValues(values);
   const normalizedRows = rows.map((row, index) => ({ data: normalizeRow(row), sheetRow: index + 2 }))
     .filter(({ data }) => String(data.task ?? "").trim().toLowerCase() !== "task" && String(data.task ?? "").trim() !== "");
-  const scopedRows = normalizedRows.filter(({ data }) => rowsInSheetSyncWeek([data]).length > 0);
+  const dateOrder = sheetDateOrder(normalizedRows.map(({ data }) => data));
+  const scopedRows = normalizedRows.filter(({ data }) => rowsInSheetSyncWeek([data], dateOrder).length > 0);
   const start = SHEET_SYNC_WEEK.start;
   const end = SHEET_SYNC_WEEK.end;
   const weekId = `google-${env.GOOGLE_SHEET_ID}-${worksheet.gid}-${SHEET_SYNC_WEEK.id}`;
-  const preparedTasks = scopedRows.map(({ data }) => prepareWeeklyTask(data, weekId, worksheet.gid, start));
+  const preparedTasks = scopedRows.map(({ data }) => prepareWeeklyTask(data, weekId, worksheet.gid, start, dateOrder));
   const targets = preparedTasks.reduce((result, task) => {
     if (task.kind === "script") result.scripts += task.target;
     if (task.normalizedType === "email") result.emails += task.target;
@@ -122,11 +123,11 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
   return { synced, failures };
 };
 
-const prepareWeeklyTask = (row: Record<string, unknown>, weekId: string, gid: number, weekStart: Date) => {
+const prepareWeeklyTask = (row: Record<string, unknown>, weekId: string, gid: number, weekStart: Date, dateOrder: "day-first" | "month-first") => {
   const title = String(row.task).trim();
   const owner = String(row.owner ?? "").trim() || undefined;
-  const startDate = parseSheetDate(row.startDate);
-  const endDate = parseSheetDate(row.endDate);
+  const startDate = parseSheetDate(row.startDate, dateOrder);
+  const endDate = parseSheetDate(row.endDate, dateOrder);
   const deliverable = String(row.deliverable ?? "").trim() || undefined;
   const notes = String(row.notes ?? "").trim() || undefined;
   const dayBucketValue = String(row.priority ?? "").trim().toUpperCase();
@@ -156,7 +157,7 @@ const prepareWeeklyTask = (row: Record<string, unknown>, weekId: string, gid: nu
   if (!Number.isFinite(completed) || completed < 0) throw new Error(`Invalid completed count for task "${title}"`);
   const target = progress.target;
   return {
-    recordId, weekId, title, kind, owner, status, startDate, endDate, deliverable, notes, dayBucket, dayDate,
+    recordId, weekId, title, kind, owner, status, startDate, endDate, deliverable, accountNames, notes, dayBucket, dayDate,
     ...progress, target, completed,
     accountOutcomes: parseAccountOutcomes([accountNames, notes].filter(Boolean).join("\n")),
     workflowActual: reportedCompleted ? completed : progress.workflowActual

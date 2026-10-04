@@ -55,6 +55,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
     weekday: task.dayDate?.toLocaleDateString("en", { weekday: "long", timeZone: "UTC" }) ?? task.dayBucket ?? "—",
     target: task.target, completed: taskCompleted, remaining, status: task.status,
     reason: task.blockerSummary ?? (remaining > 0 ? task.notes?.split(/\r?\n/).find(Boolean) ?? "No reason provided" : "Completed"),
+    accountNames: task.accountNames ?? "",
     clarifications: task.notes ?? "",
     accountOutcomes: task.accountOutcomes
   }));
@@ -92,6 +93,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
         weekday: first.task.dayDate?.toLocaleDateString("en", { weekday: "long", timeZone: "UTC" }) ?? first.task.dayBucket ?? "—",
         target: actual, completed: actual, remaining: 0, status,
         reason: facts.map(({ task }) => task.notes).filter((notes): notes is string => Boolean(notes)).join("\n\n") || "No notes provided",
+        accountNames: facts.map(({ task }) => task.accountNames).filter((names): names is string => Boolean(names)).join("\n"),
         clarifications: facts.map(({ task }) => task.notes).filter((notes): notes is string => Boolean(notes)).join("\n\n"),
         noteQuantity: true
       };
@@ -105,7 +107,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
   const actionBreakdown = taskFacts.filter(({ task }) => task.kind === "action-check").reduce((totals, { task, completed: checksCompleted, remaining }) => {
     const good = task.accountOutcomes?.good ?? 0;
     const bad = (task.accountOutcomes?.bad ?? 0) + (task.accountOutcomes?.notFound ?? 0);
-    return { good: totals.good + good, bad: totals.bad + bad, pending: totals.pending + remaining, total: totals.total + checksCompleted };
+    return { good: totals.good + good, bad: totals.bad + bad, pending: totals.pending + remaining, total: totals.total + good + bad };
   }, { good: 0, bad: 0, pending: 0, total: 0 });
 
   return {
