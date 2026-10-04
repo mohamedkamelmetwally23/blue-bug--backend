@@ -20,5 +20,4 @@ googleSheetsRouter.post("/webhook", authenticateWebhook, validateBody(webhookSch
   const result = await upsertSheetRecord(req.body.row as Record<string, unknown>);
   res.status(202).json({ synced: true, ...result });
 }));
-googleSheetsRouter.post("/sync", authenticateWebhook, asyncHandler(async (_req, res) => { res.json(await pullSheet()); }));
-
+googleSheetsRouter.post("/sync", asyncHandler(async (_req, res) => { res.json(await pullSheet()); }));
