@@ -29,13 +29,20 @@ describe("canonical task progress", () => {
 
   it("removes naming variants from the normalized task type", () => {
     expect(normalizeTaskType("5 emails (atomic,proton)")).toBe("email");
+    expect(normalizeTaskType("warming new emails on wm")).not.toBe("email");
     expect(normalizeTaskType("1 active wm acc")).toBe("active wm account");
     expect(normalizeTaskType("active wm acc+warming 5 acc have money")).toBe("active wm account");
     expect(normalizeTaskType("Target active one acc amz")).toBe("target active account");
+    expect(normalizeTaskType("Target active 5 acc us + 1 acc active amz")).toBe("target active account");
+    expect(normalizeTaskType("Target active 3 acc amz")).toBe("target active account");
   });
 
   it("counts account outcomes from emoji and explicit quantities", () => {
     expect(parseAccountOutcomes("⛔ +12345678901\n🔒 +12345678902\n✅ +12345678903\n✅ Good - 2 acc\n⛔ Account locked temporarily - 24 acc\n🔒 Incorrect Password / Password reset required - 2 acc\n🚩Account not found - 2 acc\n☑️ user@example.com\n➡️ active@example.com")).toEqual({ good: 4, bad: 26, notFound: 2, total: 32 });
+  });
+
+  it("treats checked account names in the sheet as good outcomes", () => {
+    expect(parseAccountOutcomes("✅ first@example.com\n✅ second@example.com\n✅ +12345678901")).toEqual({ good: 3, bad: 0, notFound: 0, total: 3 });
   });
 
   it("uses the explicit checked-account total for action-needed progress", () => {

@@ -19,7 +19,7 @@ export const normalizeTaskType = (title: string): string => {
   if (/^invitations?\b/.test(value)) return "invitation acceptance";
   if (/^deactivation date check\b/.test(value)) return "deactivation date check";
   if (/^active wm acc\b/.test(value)) return "active wm account";
-  if (/^target active\s+(?:one|1)\s+acc\b/.test(value)) return "target active account";
+  if (/\btarget\b/.test(value)) return "target active account";
   return value.replace(/accounts?\b/g, "account");
 };
 

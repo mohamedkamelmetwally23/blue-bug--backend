@@ -6,7 +6,7 @@ import { ExpenseModel } from "../expenses/expense.model.js";
 import { IssueModel } from "../issues/issue.model.js";
 import { TaskEntryModel } from "../task-entries/task-entry.model.js";
 import { TaskModel, type TaskKind, type TaskStatus } from "../tasks/task.model.js";
-import { calculateTaskProgress, resolveDayBucketDate } from "../tasks/task-progress.js";
+import { calculateTaskProgress, parseAccountOutcomes, resolveDayBucketDate } from "../tasks/task-progress.js";
 import { WeekModel } from "../weeks/week.model.js";
 import { normalizeRow, rowsFromValues } from "./google-sheets.mapper.js";
 import { sheetRecordSchema } from "./google-sheets.schemas.js";
@@ -79,7 +79,7 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
   const preparedTasks = normalizedRows.map((row) => prepareWeeklyTask(row, weekId, worksheet.gid, start));
   const targets = preparedTasks.reduce((result, task) => {
     if (task.kind === "script") result.scripts += task.target;
-    if (task.kind === "email") result.emails += task.target;
+    if (task.normalizedType === "email") result.emails += task.target;
     if (["activation", "deactivation", "invitation", "action-check"].includes(task.kind)) result.accounts += task.target;
     return result;
   }, { scripts: 0, emails: 0, accounts: 0 });
@@ -151,6 +151,15 @@ const prepareWeeklyTask = (row: Record<string, unknown>, weekId: string, gid: nu
   const dayBucket = dayBucketValue || undefined;
   const dayDate = dayBucket ? resolveDayBucketDate(dayBucket, weekStart) : undefined;
   const progress = calculateTaskProgress({ title, notes, status });
-  return { recordId, weekId, title, kind, owner, status, startDate, endDate, deliverable, notes, dayBucket, dayDate, ...progress };
+  const accountNames = String(row.accountNames ?? "").trim();
+  const reportedCompleted = String(row.completed ?? "").trim();
+  const completed = reportedCompleted ? Number(reportedCompleted) : progress.completed;
+  if (!Number.isFinite(completed) || completed < 0) throw new Error(`Invalid completed count for task "${title}"`);
+  const target = kind === "action-check" && reportedCompleted ? Math.max(progress.target, completed) : progress.target;
+  return {
+    recordId, weekId, title, kind, owner, status, startDate, endDate, deliverable, notes, dayBucket, dayDate,
+    ...progress, target, completed,
+    accountOutcomes: parseAccountOutcomes([accountNames, notes].filter(Boolean).join("\n")),
+    workflowActual: reportedCompleted ? completed : progress.workflowActual
+  };
 };
-

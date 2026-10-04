@@ -6,8 +6,6 @@ import { TaskEntryModel } from "../task-entries/task-entry.model.js";
 import { TaskModel, type TaskKind } from "../tasks/task.model.js";
 import { WeekModel } from "../weeks/week.model.js";
 
-interface KindTotal { _id: TaskKind; completed: number; }
-
 export const getOverview = async (requestedWeekId?: string): Promise<OverviewResponse> => {
   const week = requestedWeekId
     ? await WeekModel.findOne({ weekId: requestedWeekId })
@@ -16,15 +14,9 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
   if (!week) return emptyOverview();
   const weekId = week.weekId;
 
-  const [taskGroups, kindTotals, activeAccounts, expenses, issues, blockedTasks, blockedAccounts, tasks, entries] = await Promise.all([
+  const [taskGroups, activeAccounts, expenses, issues, blockedTasks, blockedAccounts, tasks, entries] = await Promise.all([
     TaskModel.aggregate<{ _id: TaskStatus; count: number }>([
       { $match: { weekId } }, { $group: { _id: "$status", count: { $sum: 1 } } }
-    ]),
-    TaskEntryModel.aggregate<KindTotal>([
-      { $match: { weekId } },
-      { $lookup: { from: "tasks", localField: "taskId", foreignField: "_id", as: "task" } },
-      { $unwind: "$task" },
-      { $group: { _id: "$task.kind", completed: { $sum: "$completed" } } }
     ]),
     AccountModel.countDocuments({ weekId, lifecycleStatus: "active", activationStatus: "active" }),
     ExpenseModel.aggregate<{ total: number }>([{ $match: { weekId } }, { $group: { _id: null, total: { $sum: "$amount" } } }]),
@@ -36,7 +28,8 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
 
   const status: Record<TaskStatus, number> = { "not-started": 0, "in-progress": 0, completed: 0, blocked: 0 };
   for (const group of taskGroups) status[group._id] = group.count;
-  const completedFor = (kind: TaskKind): number => kindTotals.find((entry) => entry._id === kind)?.completed ?? 0;
+  const completedFor = (kind: TaskKind): number =>
+    taskFacts.filter(({ task }) => task.kind === kind).reduce((sum, { completed: value }) => sum + value, 0);
   const spent = expenses[0]?.total ?? 0;
   const completedByTask = new Map<string, number>();
   for (const entry of entries) completedByTask.set(entry.taskId.toString(), (completedByTask.get(entry.taskId.toString()) ?? 0) + entry.completed);
@@ -63,6 +56,12 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
     const facts = taskFacts.filter(({ task }) => task.kind === kind);
     return { completed: facts.reduce((sum, fact) => sum + fact.completed, 0), target: facts.reduce((sum, fact) => sum + fact.task.target, 0) };
   };
+  const emailFacts = tasks
+    .filter((task) => task.normalizedType === "email")
+    .map((task) => {
+      const taskCompleted = completedByTask.get(task.id) ?? 0;
+      return { task, completed: taskCompleted, remaining: Math.max(task.target - taskCompleted, 0) };
+    });
   const factsForType = (normalizedType: string) => taskFacts.filter(({ task }) => task.normalizedType === normalizedType);
   const metricForType = (normalizedType: string) => {
     const facts = factsForType(normalizedType);
@@ -95,17 +94,20 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
     good: totals.good + (task.accountOutcomes?.good ?? 0), bad: totals.bad + (task.accountOutcomes?.bad ?? 0),
     notFound: totals.notFound + (task.accountOutcomes?.notFound ?? 0), total: totals.total + (task.accountOutcomes?.total ?? 0)
   }), { good: 0, bad: 0, notFound: 0, total: 0 });
-  const actionBreakdown = taskFacts.filter(({ task }) => task.kind === "action-check").reduce((totals, { task }) => {
+  const actionBreakdown = taskFacts.filter(({ task }) => task.kind === "action-check").reduce((totals, { task, completed: checksCompleted, remaining }) => {
     const good = task.accountOutcomes?.good ?? 0;
     const bad = (task.accountOutcomes?.bad ?? 0) + (task.accountOutcomes?.notFound ?? 0);
-    return { good: totals.good + good, bad: totals.bad + bad, pending: totals.pending + Math.max(task.target - good - bad, 0), total: totals.total + task.target };
+    return { good: totals.good + good, bad: totals.bad + bad, pending: totals.pending + remaining, total: totals.total + checksCompleted };
   }, { good: 0, bad: 0, pending: 0, total: 0 });
 
   return {
     week: { id: week.weekId, label: week.label, start: week.start.toISOString(), end: week.end.toISOString() },
     output: {
       scripts: { completed: completedFor("script"), target: week.targets.scripts },
-      emails: { completed: completedFor("email"), target: week.targets.emails },
+      emails: {
+        completed: emailFacts.reduce((sum, fact) => sum + fact.completed, 0),
+        target: emailFacts.reduce((sum, fact) => sum + fact.task.target, 0)
+      },
       actionNeeded: metricFor("action-check"),
       invitationAcceptance: metricForType("invitation acceptance"),
       deactivationCheck: metricForType("deactivation date check"),
@@ -115,7 +117,7 @@ export const getOverview = async (requestedWeekId?: string): Promise<OverviewRes
     },
     accountOutcomes,
     actionBreakdown,
-    metricDetails: { scripts: detailFor(["script"]), emails: detailFor(["email"]), actionNeeded: detailFor(["action-check"]), invitationAcceptance: detailsForType("invitation acceptance"), deactivationCheck: detailsForType("deactivation date check"), activeWmAccount: detailsForType("active wm account"), targetActiveAccount: detailsForType("target active account"), accounts: detailFor(["action-check"]) },
+    metricDetails: { scripts: detailFor(["script"]), emails: detailForFacts(emailFacts), actionNeeded: detailFor(["action-check"]), invitationAcceptance: detailsForType("invitation acceptance"), deactivationCheck: detailsForType("deactivation date check"), activeWmAccount: detailsForType("active wm account"), targetActiveAccount: detailsForType("target active account"), accounts: detailFor(["action-check"]) },
     taskStatus: status,
     budget: { budget: week.budget, spent, balance: week.budget - spent, currency: week.currency },
     attention: [
@@ -142,4 +144,3 @@ const emptyOverview = (): OverviewResponse => ({
   budget: { budget: 0, spent: 0, balance: 0, currency: "USD" }, attention: [], recentIssues: [],
   weeklyKpis: { required: 0, completed: 0, remaining: 0, completionRate: 0 }, targetVsActual: [], ownerPerformance: [], incompleteWork: [], systemBlockers: []
 });
-
