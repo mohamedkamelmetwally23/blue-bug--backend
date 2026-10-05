@@ -32,11 +32,9 @@ const schema = z.object({
   GOOGLE_PRIVATE_KEY: z.string().min(1),
   GOOGLE_WEBHOOK_SECRET: z.string().default(""),
   GOOGLE_SHEETS_SYNC_ENABLED: booleanString,
-  GOOGLE_SHEETS_INITIAL_SYNC: booleanString,
-  GOOGLE_SHEETS_SYNC_INTERVAL_MS: z.coerce.number().int().min(15000).default(60000)
+  GOOGLE_SHEETS_INITIAL_SYNC: booleanString
 });
 
 const parsed = schema.safeParse({ ...process.env, GOOGLE_PRIVATE_KEY: normalizedGooglePrivateKey });
 if (!parsed.success) throw new Error(`Invalid environment: ${parsed.error.message}`);
 export const env = parsed.data;
-
