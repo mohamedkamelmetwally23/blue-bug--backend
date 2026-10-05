@@ -75,6 +75,12 @@ export const pullSheet = async (): Promise<{ synced: number; failures: { row: nu
     .filter(({ data }) => String(data.task ?? "").trim().toLowerCase() !== "task" && String(data.task ?? "").trim() !== "");
   const dateOrder = sheetDateOrder(normalizedRows.map(({ data }) => data));
   const scopedRows = normalizedRows.filter(({ data }) => rowsInSheetSyncWeek([data], dateOrder).length > 0);
+  if (scopedRows.length === 0) {
+    return {
+      synced: 0,
+      failures: [{ row: 0, message: `No task rows found for ${SHEET_SYNC_WEEK.label}; existing data was left unchanged.` }]
+    };
+  }
   const start = SHEET_SYNC_WEEK.start;
   const end = SHEET_SYNC_WEEK.end;
   const weekId = `google-${env.GOOGLE_SHEET_ID}-${worksheet.gid}-${SHEET_SYNC_WEEK.id}`;
