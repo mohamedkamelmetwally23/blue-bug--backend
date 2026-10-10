@@ -88,6 +88,7 @@ router.get("/tasks", async (req, res) => {
       categoryId: id.optional(),
       employeeId: id.optional(),
       day: workDate.optional(),
+      weekday: z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]).optional(),
       from: workDate.optional(),
       to: workDate.optional(),
       status: z.enum(["Not Started", "In Progress", "Completed"]).optional(),
@@ -115,6 +116,13 @@ router.get("/tasks", async (req, res) => {
       ...(q.from ? { $gte: q.from } : {}),
       ...(q.to ? { $lte: q.to } : {}),
     };
+  if (q.weekday) {
+    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    filter.$expr = { $eq: [
+      { $dayOfWeek: { $dateFromString: { dateString: "$workDate", format: "%Y-%m-%d", onError: null, onNull: null } } },
+      weekdays.indexOf(q.weekday) + 1,
+    ] };
+  }
   const [items, total] = await Promise.all([
     Task.aggregate([
       { $match: filter },
