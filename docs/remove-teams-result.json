@@ -1,0 +1,38 @@
+{
+  "database": "ops_dev_blue_bug_v2",
+  "atlasVerified": true,
+  "executedAt": "2026-10-10T16:48:23.481Z",
+  "deletedCollections": [
+    "teams",
+    "team_memberships"
+  ],
+  "droppedIndexes": [
+    "categories:teamId_1_name_1",
+    "categories:teamId_1_active_1",
+    "tasks:teamId_1_workDate_-1__id_-1",
+    "tasks:teamId_1_categoryId_1_status_1"
+  ],
+  "collections": [
+    {
+      "name": "users",
+      "count": 3,
+      "recordsPreserved": true
+    },
+    {
+      "name": "categories",
+      "count": 8,
+      "recordsPreserved": true
+    },
+    {
+      "name": "tasks",
+      "count": 0,
+      "recordsPreserved": true
+    },
+    {
+      "name": "task_entries",
+      "count": 0,
+      "recordsPreserved": true
+    }
+  ],
+  "credentialsAndBusinessContentPreserved": true
+}

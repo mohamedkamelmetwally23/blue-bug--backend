@@ -1,0 +1,39 @@
+{
+  "validatedAt": "2026-10-10T16:06:10.141Z",
+  "backend": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "unitTests": 9,
+    "integrationTests": 10,
+    "build": "passed"
+  },
+  "frontend": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "interactionTests": 6,
+    "build": "passed",
+    "bundleGzipKiB": 78.62
+  },
+  "browser": {
+    "checks": 9,
+    "result": "passed",
+    "pageErrors": 0,
+    "isolatedMongoDB": true
+  },
+  "atlas": {
+    "database": "ops_dev_blue_bug_v2",
+    "users": 3,
+    "teams": 1,
+    "memberships": 3,
+    "categories": 0,
+    "tasks": 0,
+    "task_entries": 0,
+    "unexpectedCollections": []
+  },
+  "limitations": [
+    "Existing Atlas plaintext passwords unavailable; preserved credentials verified unchanged; live account sign-in not executed",
+    "Vercel configuration prepared; deployment not executed"
+  ],
+  "pushed": false,
+  "deployed": false
+}

@@ -1,0 +1,1621 @@
+﻿{
+    "date":  "2026-10-10",
+    "database":  "ops_dev_blue_bug_v2",
+    "primary":  {
+                    "passed":  true,
+                    "runId":  "local-audit-2026-10-10T13-51-00-093Z",
+                    "checks":  [
+                                   {
+                                       "name":  "API health",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Unauthenticated protection",
+                                       "method":  "GET",
+                                       "status":  401,
+                                       "expected":  [
+                                                        401
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Invalid login",
+                                       "method":  "POST",
+                                       "status":  401,
+                                       "expected":  [
+                                                        401
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Login manager",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Session manager",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Login coordinator",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Session coordinator",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Login employee",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Session employee",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Login peer",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Session peer",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Login outsider",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Session outsider",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Cross-team read denied",
+                                       "method":  "GET",
+                                       "status":  403,
+                                       "expected":  [
+                                                        403
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Cross-team mutation denied",
+                                       "method":  "POST",
+                                       "status":  403,
+                                       "expected":  [
+                                                        403
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Manager plan mutation denied",
+                                       "method":  "POST",
+                                       "status":  403,
+                                       "expected":  [
+                                                        403
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Employee category mutation denied",
+                                       "method":  "POST",
+                                       "status":  403,
+                                       "expected":  [
+                                                        403
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Create weekly plan",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Create dynamic category",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Assign employee task",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Employee sees assignment",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Same-team employee assignment isolation",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Late entry requires permission",
+                                       "method":  "POST",
+                                       "status":  403,
+                                       "expected":  [
+                                                        403
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Grant late amendment permission",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Reject invalid dynamic option",
+                                       "method":  "POST",
+                                       "status":  422,
+                                       "expected":  [
+                                                        422
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Reject missing required dynamic field",
+                                       "method":  "POST",
+                                       "status":  422,
+                                       "expected":  [
+                                                        422
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Reject unknown result",
+                                       "method":  "POST",
+                                       "status":  422,
+                                       "expected":  [
+                                                        422
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 1",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Idempotent operation retry",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 2",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 3",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 4",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 5",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 6",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 7",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 8",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record Account operation 9",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Record additional unassigned work",
+                                       "method":  "POST",
+                                       "status":  201,
+                                       "expected":  [
+                                                        201
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Same-team employee operation isolation",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Submit Day",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Repeated Submit Day",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Coordinator receives submission notification",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Coordinator review queue",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Return operation for correction",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Return operation for correction",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Return operation for correction",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Stale duplicate review rejected",
+                                       "method":  "POST",
+                                       "status":  409,
+                                       "expected":  [
+                                                        409
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Unresolved week cannot finalize",
+                                       "method":  "POST",
+                                       "status":  409,
+                                       "expected":  [
+                                                        409
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Employee receives return notifications",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Correct returned operation",
+                                       "method":  "PATCH",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Correct returned operation",
+                                       "method":  "PATCH",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Correct returned operation",
+                                       "method":  "PATCH",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Resubmit corrected day",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Only corrected operations pending",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve corrected operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve corrected operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Approve corrected operation",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Productivity and result breakdown",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Finalize completed week",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Finalized day cannot submit",
+                                       "method":  "POST",
+                                       "status":  409,
+                                       "expected":  [
+                                                        409
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Finalized operation cannot edit",
+                                       "method":  "PATCH",
+                                       "status":  409,
+                                       "expected":  [
+                                                        409
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Finalized assignment cannot edit",
+                                       "method":  "PATCH",
+                                       "status":  409,
+                                       "expected":  [
+                                                        409
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Manager finalized report",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Manager monthly report",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "weekly xlsx export",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "weekly pdf export",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "monthly xlsx export",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "monthly pdf export",
+                                       "method":  "GET",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Logout employee",
+                                       "method":  "POST",
+                                       "status":  200,
+                                       "expected":  [
+                                                        200
+                                                    ]
+                                   },
+                                   {
+                                       "name":  "Revoked session rejected",
+                                       "method":  "GET",
+                                       "status":  401,
+                                       "expected":  [
+                                                        401
+                                                    ]
+                                   }
+                               ]
+                },
+    "supplemental":  {
+                         "passed":  true,
+                         "runId":  "local-audit-2026-10-10T13-40-43-512Z",
+                         "checks":  [
+                                        {
+                                            "name":  "Edge audit login coordinator",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Edge audit login employee",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Edge audit login peer",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Create edge-case plan",
+                                            "method":  "POST",
+                                            "status":  201,
+                                            "expected":  201
+                                        },
+                                        {
+                                            "name":  "Assign edge task",
+                                            "method":  "POST",
+                                            "status":  201,
+                                            "expected":  201
+                                        },
+                                        {
+                                            "name":  "Grant edge late permission employee",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Grant edge late permission peer",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Create assigned edge draft",
+                                            "method":  "POST",
+                                            "status":  201,
+                                            "expected":  201
+                                        },
+                                        {
+                                            "name":  "Same-team employee cannot edit another employee operation",
+                                            "method":  "PATCH",
+                                            "status":  404,
+                                            "expected":  404
+                                        },
+                                        {
+                                            "name":  "Reject unrelated assignment",
+                                            "method":  "POST",
+                                            "status":  422,
+                                            "expected":  422
+                                        },
+                                        {
+                                            "name":  "Change assigned draft to unassigned work",
+                                            "method":  "PATCH",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Reject quantity in classification category",
+                                            "method":  "POST",
+                                            "status":  422,
+                                            "expected":  422
+                                        },
+                                        {
+                                            "name":  "Create quantity category",
+                                            "method":  "POST",
+                                            "status":  201,
+                                            "expected":  201
+                                        },
+                                        {
+                                            "name":  "Record quantity operation",
+                                            "method":  "POST",
+                                            "status":  201,
+                                            "expected":  201
+                                        },
+                                        {
+                                            "name":  "Submit edge operations",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Read edge queue",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Concurrent approval contender",
+                                            "method":  "POST",
+                                            "status":  409,
+                                            "expected":  409
+                                        },
+                                        {
+                                            "name":  "Concurrent approval contender",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Approve remaining edge operation",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Quantity remains separate from productivity",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Employee requests category",
+                                            "method":  "POST",
+                                            "status":  201,
+                                            "expected":  201
+                                        },
+                                        {
+                                            "name":  "Coordinator accepts category request",
+                                            "method":  "PATCH",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Request decision is not applied twice",
+                                            "method":  "PATCH",
+                                            "status":  409,
+                                            "expected":  409
+                                        },
+                                        {
+                                            "name":  "Notification preference read",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Disable in-app notifications",
+                                            "method":  "PUT",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Disabled notification center is empty",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Restore in-app notifications",
+                                            "method":  "PUT",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Read notification center",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Mark notification read",
+                                            "method":  "PATCH",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Read coordinator audit history",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Finalize edge week",
+                                            "method":  "POST",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Edge finalized snapshot",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Expired JWT is rejected",
+                                            "method":  "GET",
+                                            "status":  401,
+                                            "expected":  401
+                                        },
+                                        {
+                                            "name":  "Malformed JSON rejected",
+                                            "method":  "POST",
+                                            "status":  400,
+                                            "expected":  400
+                                        },
+                                        {
+                                            "name":  "Configured frontend CORS origin accepted",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Untrusted CORS origin receives no access permission",
+                                            "method":  "GET",
+                                            "status":  200,
+                                            "expected":  200
+                                        },
+                                        {
+                                            "name":  "Frontend API preflight",
+                                            "method":  "OPTIONS",
+                                            "status":  204,
+                                            "expected":  204
+                                        }
+                                    ],
+                         "connectionReuse":  {
+                                                 "concurrentCalls":  10,
+                                                 "sameClient":  true,
+                                                 "reconnected":  true
+                                             },
+                         "queryExecution":  {
+                                                "returned":  10,
+                                                "documentsExamined":  10,
+                                                "keysExamined":  10,
+                                                "index":  "teamId_1_workDate_1_status_1"
+                                            }
+                     },
+    "browser":  {
+                    "passed":  true,
+                    "runId":  "local-audit-2026-10-10T13-51-00-093Z",
+                    "week":  "2026-09-28",
+                    "checks":  [
+                                   {
+                                       "name":  "Coordinator signs in with a real Atlas account",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator creates weekly plan through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator configures results and dynamic fields through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator assigns employee task and target through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator grants late permission through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee sees assigned task in rendered browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Required fields block invalid browser submission",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee records assigned account 1 through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee records assigned account 2 through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee records additional unassigned work through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee submits daily drafts through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator sees submission in notification center",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator approves browser account 1",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator approves browser account 2",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator returns one independent operation through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee corrects and resubmits returned operation through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator approves corrected browser operation",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Coordinator finalizes the week through browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Manager sees locked finalized report and all results",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Manager downloads weekly Excel from browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Manager downloads weekly PDF from browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Manager downloads monthly Excel from browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Manager downloads monthly PDF from browser",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Finalized employee entry and Submit Day controls are locked",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "manager session survives reload with one restoration request",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "coordinator session survives reload with one restoration request",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "employee session survives reload with one restoration request",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "manager responsive 1440px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "manager responsive 768px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "manager responsive 390px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "coordinator responsive 1440px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "coordinator responsive 768px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "coordinator responsive 390px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "employee responsive 1440px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "employee responsive 768px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "employee responsive 390px",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee assignment empty state renders",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee operation empty state renders",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Loading state renders while real API request is delayed",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee navigation Overview",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee navigation My tasks",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee navigation My operations",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee navigation Reports",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee navigation Notifications",
+                                       "passed":  true
+                                   },
+                                   {
+                                       "name":  "Employee navigation Preferences",
+                                       "passed":  true
+                                   }
+                               ],
+                    "consoleErrors":  [
+
+                                      ],
+                    "pageErrors":  [
+
+                                   ],
+                    "httpResponses":  [
+                                          {
+                                              "count":  179,
+                                              "status":  "200"
+                                          },
+                                          {
+                                              "count":  6,
+                                              "status":  "201"
+                                          }
+                                      ],
+                    "canceledRequests":  83
+                },
+    "populatedResponsiveVerification":  {
+                                            "passed":  true,
+                                            "checks":  [
+                                                           {
+                                                               "name":  "Finalized employee entry and Submit Day controls are locked",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "manager session survives reload with one restoration request",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "coordinator session survives reload with one restoration request",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "employee session survives reload with one restoration request",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "manager responsive 1440px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "manager responsive 768px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "manager responsive 390px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "coordinator responsive 1440px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "coordinator responsive 768px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "coordinator responsive 390px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "employee responsive 1440px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "employee responsive 768px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "employee responsive 390px",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee assignment empty state renders",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee operation empty state renders",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Loading state renders while real API request is delayed",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee navigation Overview",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee navigation My tasks",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee navigation My operations",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee navigation Reports",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee navigation Notifications",
+                                                               "passed":  true
+                                                           },
+                                                           {
+                                                               "name":  "Employee navigation Preferences",
+                                                               "passed":  true
+                                                           }
+                                                       ],
+                                            "consoleErrors":  [
+
+                                                              ],
+                                            "pageErrors":  [
+
+                                                           ]
+                                        },
+    "compiledRuntime":  {
+                            "passed":  true,
+                            "runtime":  "v22.20.0",
+                            "mode":  "production",
+                            "database":  "ops_dev_blue_bug_v2",
+                            "statuses":  [
+                                             {
+                                                 "path":  "/health",
+                                                 "status":  200
+                                             },
+                                             {
+                                                 "path":  "/auth/me unauthenticated",
+                                                 "status":  401
+                                             },
+                                             {
+                                                 "path":  "/auth/login manager",
+                                                 "status":  200
+                                             },
+                                             {
+                                                 "path":  "/reports",
+                                                 "status":  200
+                                             }
+                                         ]
+                        },
+    "databaseInventory":  {
+                              "database":  "ops_dev_blue_bug_v2",
+                              "collections":  [
+                                                  {
+                                                      "name":  "auth_login_limits",
+                                                      "count":  10,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "key_1",
+                                                                          "key":  {
+                                                                                      "key":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      },
+                                                                      {
+                                                                          "name":  "expiresAt_1",
+                                                                          "key":  {
+                                                                                      "expiresAt":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "users",
+                                                      "count":  20,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "email_1",
+                                                                          "key":  {
+                                                                                      "email":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "teams",
+                                                      "count":  8,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "team_memberships",
+                                                      "count":  20,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_userId_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "userId":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      },
+                                                                      {
+                                                                          "name":  "userId_1_teamId_1",
+                                                                          "key":  {
+                                                                                      "userId":  1,
+                                                                                      "teamId":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "task_categories",
+                                                      "count":  9,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_active_1_name_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "active":  1,
+                                                                                      "name":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "category_requests",
+                                                      "count":  1,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_status_1_createdAt_-1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "status":  1,
+                                                                                      "createdAt":  -1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "weekly_plans",
+                                                      "count":  9,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_weekStart_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "weekStart":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "task_assignments",
+                                                      "count":  9,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "planId_1_employeeId_1",
+                                                                          "key":  {
+                                                                                      "planId":  1,
+                                                                                      "employeeId":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_employeeId_1_createdAt_-1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "employeeId":  1,
+                                                                                      "createdAt":  -1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "operations",
+                                                      "count":  54,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "employeeId_1_requestKey_1",
+                                                                          "key":  {
+                                                                                      "employeeId":  1,
+                                                                                      "requestKey":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_workDate_1_status_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "workDate":  1,
+                                                                                      "status":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "employeeId_1_workDate_1",
+                                                                          "key":  {
+                                                                                      "employeeId":  1,
+                                                                                      "workDate":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "assignmentId_1_status_1",
+                                                                          "key":  {
+                                                                                      "assignmentId":  1,
+                                                                                      "status":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_weekStart_1_status_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "weekStart":  1,
+                                                                                      "status":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "daily_submissions",
+                                                      "count":  9,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "employeeId_1_workDate_1",
+                                                                          "key":  {
+                                                                                      "employeeId":  1,
+                                                                                      "workDate":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "late_permissions",
+                                                      "count":  10,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_employeeId_1_weekStart_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "employeeId":  1,
+                                                                                      "weekStart":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "approval_events",
+                                                      "count":  66,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "operationId_1_revision_1",
+                                                                          "key":  {
+                                                                                      "operationId":  1,
+                                                                                      "revision":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "weekly_report_snapshots",
+                                                      "count":  8,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_weekStart_1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "weekStart":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "notifications",
+                                                      "count":  40,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "userId_1_eventKey_1",
+                                                                          "key":  {
+                                                                                      "userId":  1,
+                                                                                      "eventKey":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      },
+                                                                      {
+                                                                          "name":  "userId_1_createdAt_-1",
+                                                                          "key":  {
+                                                                                      "userId":  1,
+                                                                                      "createdAt":  -1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "emailState_1_leaseUntil_1",
+                                                                          "key":  {
+                                                                                      "emailState":  1,
+                                                                                      "leaseUntil":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "notification_preferences",
+                                                      "count":  1,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "userId_1",
+                                                                          "key":  {
+                                                                                      "userId":  1
+                                                                                  },
+                                                                          "unique":  true
+                                                                      }
+                                                                  ]
+                                                  },
+                                                  {
+                                                      "name":  "audit_logs",
+                                                      "count":  198,
+                                                      "indexes":  [
+                                                                      {
+                                                                          "name":  "_id_",
+                                                                          "key":  {
+                                                                                      "_id":  1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      },
+                                                                      {
+                                                                          "name":  "teamId_1_createdAt_-1",
+                                                                          "key":  {
+                                                                                      "teamId":  1,
+                                                                                      "createdAt":  -1
+                                                                                  },
+                                                                          "unique":  false
+                                                                      }
+                                                                  ]
+                                                  }
+                                              ]
+                          },
+    "unitTests":  {
+                      "frontend":  6,
+                      "backend":  19
+                  },
+    "staticChecks":  {
+                         "dependencyAudit":  "zero vulnerabilities both",
+                         "build":  "passed both",
+                         "typecheck":  "passed both",
+                         "gitDiffCheck":  "passed both",
+                         "lint":  "passed both"
+                     },
+    "notTested":  [
+                      "Vercel hosted runtime and Preview",
+                      "GitHub hosted checks",
+                      "Live external email and scheduler",
+                      "Atlas credential privileges and network policy",
+                      "Independent legacy/production checksums",
+                      "Production sized load and exports"
+                  ],
+    "productionWrites":  false,
+    "pushPerformed":  false,
+    "deploymentPerformed":  false
+}

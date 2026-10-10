@@ -1,0 +1,407 @@
+{
+  "database": "ops_dev_blue_bug_v2",
+  "collections": [
+    {
+      "name": "auth_login_limits",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "key_1",
+          "key": {
+            "key": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "expiresAt_1",
+          "key": {
+            "expiresAt": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "email_1",
+          "key": {
+            "email": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "teams",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "team_memberships",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_userId_1",
+          "key": {
+            "teamId": 1,
+            "userId": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "userId_1_teamId_1",
+          "key": {
+            "userId": 1,
+            "teamId": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "task_categories",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_active_1_name_1",
+          "key": {
+            "teamId": 1,
+            "active": 1,
+            "name": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "category_requests",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_status_1_createdAt_-1",
+          "key": {
+            "teamId": 1,
+            "status": 1,
+            "createdAt": -1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "weekly_plans",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_weekStart_1",
+          "key": {
+            "teamId": 1,
+            "weekStart": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "task_assignments",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "planId_1_employeeId_1",
+          "key": {
+            "planId": 1,
+            "employeeId": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_employeeId_1_createdAt_-1",
+          "key": {
+            "teamId": 1,
+            "employeeId": 1,
+            "createdAt": -1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "operations",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "employeeId_1_requestKey_1",
+          "key": {
+            "employeeId": 1,
+            "requestKey": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "teamId_1_workDate_1_status_1",
+          "key": {
+            "teamId": 1,
+            "workDate": 1,
+            "status": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "employeeId_1_workDate_1",
+          "key": {
+            "employeeId": 1,
+            "workDate": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "assignmentId_1_status_1",
+          "key": {
+            "assignmentId": 1,
+            "status": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_weekStart_1_status_1",
+          "key": {
+            "teamId": 1,
+            "weekStart": 1,
+            "status": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "daily_submissions",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "employeeId_1_workDate_1",
+          "key": {
+            "employeeId": 1,
+            "workDate": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "late_permissions",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_employeeId_1_weekStart_1",
+          "key": {
+            "teamId": 1,
+            "employeeId": 1,
+            "weekStart": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "approval_events",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "operationId_1_revision_1",
+          "key": {
+            "operationId": 1,
+            "revision": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "weekly_report_snapshots",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_weekStart_1",
+          "key": {
+            "teamId": 1,
+            "weekStart": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "userId_1_eventKey_1",
+          "key": {
+            "userId": 1,
+            "eventKey": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "userId_1_createdAt_-1",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          },
+          "unique": false
+        },
+        {
+          "name": "emailState_1_leaseUntil_1",
+          "key": {
+            "emailState": 1,
+            "leaseUntil": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "notification_preferences",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "userId_1",
+          "key": {
+            "userId": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "audit_logs",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "teamId_1_createdAt_-1",
+          "key": {
+            "teamId": 1,
+            "createdAt": -1
+          },
+          "unique": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "database": "ops_dev_blue_bug_v2",
+  "environment": "development",
+  "atlasVerified": true,
+  "executedAt": "2026-10-10T15:40:50.122Z",
+  "preservedUsers": 3,
+  "userDocumentsUnchanged": true,
+  "deletedCollections": [
+    "auth_login_limits",
+    "notification_preferences",
+    "teams",
+    "category_requests",
+    "notifications",
+    "task_categories",
+    "tasks",
+    "task_assignments",
+    "approval_events",
+    "task_entries",
+    "late_permissions",
+    "categories",
+    "weekly_plans",
+    "weekly_report_snapshots",
+    "operations",
+    "audit_logs",
+    "daily_submissions",
+    "team_memberships"
+  ],
+  "collections": [
+    {
+      "name": "users",
+      "count": 3
+    },
+    {
+      "name": "teams",
+      "count": 1
+    },
+    {
+      "name": "team_memberships",
+      "count": 3
+    },
+    {
+      "name": "categories",
+      "count": 0
+    },
+    {
+      "name": "tasks",
+      "count": 0
+    },
+    {
+      "name": "task_entries",
+      "count": 0
+    }
+  ]
+}

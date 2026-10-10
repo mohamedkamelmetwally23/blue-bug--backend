@@ -1,18 +1,24 @@
 import mongoose from "mongoose";
-import { env } from "./env.js";
-
-let connectionPromise: Promise<void> | undefined;
-
-export const connectDatabase = async (): Promise<void> => {
+import { configuration } from "./env.js";
+let pending: Promise<typeof mongoose> | undefined;
+export async function connectDatabase() {
   if (mongoose.connection.readyState === 1) return;
-  connectionPromise ??= mongoose.connect(env.MONGODB_URI, { dbName: env.MONGODB_DB_NAME })
-    .then(() => undefined)
-    .catch((error: unknown) => {
-      connectionPromise = undefined;
-      throw error;
+  if (mongoose.connection.readyState === 0) pending = undefined;
+  const env = configuration();
+  pending ??= mongoose
+    .connect(env.MONGODB_URI, {
+      dbName: env.MONGODB_DB_NAME,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 8000,
+      autoIndex: env.NODE_ENV !== "production",
+    })
+    .catch((e) => {
+      pending = undefined;
+      throw e;
     });
-  await connectionPromise;
-};
-
-export const disconnectDatabase = async (): Promise<void> => mongoose.disconnect();
-
+  await pending;
+}
+export async function disconnectDatabase() {
+  pending = undefined;
+  await mongoose.disconnect();
+}

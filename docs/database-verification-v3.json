@@ -1,0 +1,121 @@
+{
+  "database": "ops_dev_blue_bug_v2",
+  "verifiedAt": "2026-10-10T16:51:30.507Z",
+  "unexpectedCollections": [],
+  "collections": [
+    {
+      "name": "users",
+      "count": 3,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "email_1",
+          "key": {
+            "email": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "count": 8,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "name_1",
+          "key": {
+            "name": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "active_1_name_1",
+          "key": {
+            "active": 1,
+            "name": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "tasks",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "assignedEmployee_1_workDate_-1",
+          "key": {
+            "assignedEmployee": 1,
+            "workDate": -1
+          },
+          "unique": false
+        },
+        {
+          "name": "workDate_-1__id_-1",
+          "key": {
+            "workDate": -1,
+            "_id": -1
+          },
+          "unique": false
+        },
+        {
+          "name": "categoryId_1_status_1",
+          "key": {
+            "categoryId": 1,
+            "status": 1
+          },
+          "unique": false
+        }
+      ]
+    },
+    {
+      "name": "task_entries",
+      "count": 0,
+      "indexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          },
+          "unique": false
+        },
+        {
+          "name": "taskId_1_createdAt_-1",
+          "key": {
+            "taskId": 1,
+            "createdAt": -1
+          },
+          "unique": false
+        },
+        {
+          "name": "employeeId_1_updatedAt_-1",
+          "key": {
+            "employeeId": 1,
+            "updatedAt": -1
+          },
+          "unique": false
+        }
+      ]
+    }
+  ]
+}
