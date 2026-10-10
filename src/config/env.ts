@@ -14,10 +14,12 @@ const schema = z.object({
 });
 export function configuration() {
   const result = schema.safeParse(process.env);
-  if (!result.success)
-    throw new Error(
+  if (!result.success) {
+    const message =
       "Missing or invalid environment variables: " +
-        result.error.issues.map((i) => i.path.join(".")).join(", "),
-    );
+      result.error.issues.map((i) => i.path.join(".")).join(", ");
+    console.error(message);
+    throw new Error(message);
+  }
   return result.data;
 }
