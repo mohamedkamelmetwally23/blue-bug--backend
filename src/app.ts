@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { ZodError } from "zod";
-import { configuration } from "./config/env.js";
+import { frontendOrigin } from "./config/env.js";
 import { connectDatabase } from "./config/database.js";
 import { router } from "./modules/routes.js";
 import { DomainError } from "./modules/domain.js";
@@ -13,7 +13,7 @@ export function createApp() {
   app.use(
     cors({
       origin: (origin, callback) =>
-        callback(null, !origin || origin === configuration().FRONTEND_URL),
+        callback(null, !origin || origin === frontendOrigin()),
     }),
   );
   app.use(express.json({ limit: "128kb" }));

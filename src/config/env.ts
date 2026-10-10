@@ -12,6 +12,10 @@ const schema = z.object({
   AUTH_SECRET: z.string().min(32),
   FRONTEND_URL: z.string().url().default("http://localhost:5173"),
 });
+export function frontendOrigin() {
+  // Preflight must not depend on database or authentication configuration.
+  return new URL(schema.shape.FRONTEND_URL.parse(process.env.FRONTEND_URL)).origin;
+}
 export function configuration() {
   const result = schema.safeParse(process.env);
   if (!result.success) {
