@@ -72,7 +72,14 @@ router.post("/employees", async (req, res) =>
     .json({ data: await service.createEmployee(actor(res), req.body) }),
 );
 router.get("/overview", async (req, res) =>
-  res.json({ data: await service.overview(actor(res)) }),
+  res.json({
+    data: await service.overview(
+      actor(res),
+      z
+        .object({ from: workDate.optional(), to: workDate.optional() })
+        .parse(req.query),
+    ),
+  }),
 );
 router.get("/tasks", async (req, res) => {
   const a = actor(res);

@@ -295,6 +295,27 @@ describe("simplified operations flow", () => {
     expect(overview.status).toBe(200);
     expect(overview.body.data.categories[0].quantity).toBe(1);
     expect(overview.body.data.categories[0].completed).toBe(1);
+    const included = await call(
+      "manager",
+      "get",
+      "/overview?from=2026-10-10&to=2026-10-10",
+    );
+    expect(included.body.data.categories[0].quantity).toBe(1);
+    const excluded = await call(
+      "manager",
+      "get",
+      "/overview?from=2026-10-12&to=2026-10-17",
+    );
+    expect(excluded.body.data.categories[0]).toMatchObject({
+      tasks: 0,
+      completed: 0,
+      quantity: 0,
+      target: 0,
+    });
+    expect(excluded.body.data.trend).toEqual([]);
+    expect(
+      (await call("manager", "get", "/overview?from=invalid")).status,
+    ).toBe(422);
     const employees = await call("manager", "get", "/employees");
     expect(employees.body.data[0].quantity).toBe(1);
     expect(

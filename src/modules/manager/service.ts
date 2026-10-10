@@ -86,11 +86,28 @@ export async function employees(actor: Actor) {
   }));
 }
 
-export async function overview(actor: Actor) {
+export async function overview(
+  actor: Actor,
+  range: { from?: string | undefined; to?: string | undefined } = {},
+) {
   ensure(actor.role !== "employee", 403, "Management access required");
+  const match =
+    range.from || range.to
+      ? [
+          {
+            $match: {
+              workDate: {
+                ...(range.from ? { $gte: range.from } : {}),
+                ...(range.to ? { $lte: range.to } : {}),
+              },
+            },
+          },
+        ]
+      : [];
   const [categories, stats, trend] = await Promise.all([
     Category.find({}).sort({ name: 1 }).lean(),
     Task.aggregate([
+      ...match,
       ...quantityStages,
       {
         $group: {
@@ -115,6 +132,7 @@ export async function overview(actor: Actor) {
       },
     ]),
     Task.aggregate([
+      ...match,
       ...quantityStages,
       { $group: { _id: "$workDate", quantity: { $sum: "$actualQuantity" } } },
       { $sort: { _id: -1 } },
