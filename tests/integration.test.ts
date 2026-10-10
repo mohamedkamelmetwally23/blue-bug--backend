@@ -529,6 +529,13 @@ describe("simplified operations flow", () => {
       ...work,
       actualQuantity: 2,
     });
+    for (const resultStatus of ["Pending", "Bad", "Good"]) {
+      expect((await call("employee", "patch", path + "/progress", { resultStatus })).status).toBe(200);
+      const stored = await Task.findById(task._id).lean();
+      expect(stored?.resultStatus).toBe(resultStatus);
+      const reloaded = await call("employee", "get", "/tasks?categoryId=" + category.body.data._id);
+      expect(reloaded.body.data.items[0].resultStatus).toBe(resultStatus);
+    }
     const overview = await call("manager", "get", "/overview");
     expect(
       overview.body.data.categories.find(
